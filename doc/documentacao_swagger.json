@@ -1,0 +1,368 @@
+{
+  "swagger": "2.0",
+  "info": {
+      "description": "Open API Atlantic Bank",
+      "version": "1.0.0",
+      "title": "OpenAPI Atlantic Bank",
+      "termsOfService": "http://terms.apis-atlanticbank.com.br",
+      "contact": {
+          "email": "apiatlanticbank@atlanticbank.com.br"
+      },
+      "license": {
+          "name": "Apache 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+  },
+  "host": "atlanticbank.com.br",
+  "basePath": "/v2",
+  "tags": [
+      {
+          "name": "accounts",
+          "description": "Contas bancárias [Bank accounts]",
+          "externalDocs": {
+              "description": "Mais informações... [More information...]",
+              "url": "http://docs.apis-atlanticbank.com.br"
+          }
+      },
+      {
+          "name": "customers",
+          "description": "Clientes [Customers]"
+      },
+      {
+          "name": "transactions",
+          "description": "Operações Bancárias [Banking Operations]",
+          "externalDocs": {
+              "description": "Mais informações [More information...]",
+              "url": "http://docs.apis-atlanticbank.com.br"
+          }
+      }
+  ],
+  "schemes": [
+      "https",
+      "http"
+  ],
+  "paths": {
+    "/customers": {
+      "post": {
+          "tags": [
+              "customers"
+          ],
+          "summary": "Adicionar novo cliente [Add new customer]",
+          "description": "",
+          "operationId": "addCustomers",
+          "consumes": [
+              "application/json",
+              "application/xml"
+          ],
+          "produces": [
+              "application/json",
+              "application/xml"
+          ],
+          "parameters": [
+              {
+                  "in": "body",
+                  "name": "body",
+                  "description": "",
+                  "required": true,
+                  "schema": {
+                      "$ref": "#/definitions/Customers"
+                  }
+              }
+          ],
+          "responses": {
+              "200": {
+                "description": "successful operation",
+                "schema": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Customers"
+                    }
+                }
+              },
+              "405": {
+                  "description": "Entrada inválida [Invalid input]"
+              }
+          },
+          "security": [
+              {
+                  "petstore_auth": [
+                      "write:customers",
+                      "read:customers"
+                  ]
+              }
+          ]
+      },
+      "put": {
+          "tags": [
+              "customers"
+          ],
+          "summary": "Atualizar um cliente existente [Update an existing customers]",
+          "description": "",
+          "operationId": "updateCustomers",
+          "consumes": [
+              "application/json",
+              "application/xml"
+          ],
+          "produces": [
+              "application/json",
+              "application/xml"
+          ],
+          "parameters": [
+              {
+                  "in": "body",
+                  "name": "body",
+                  "description": "",
+                  "required": true,
+                  "schema": {
+                      "$ref": "#/definitions/Customers"
+                  }
+              }
+          ],
+          "responses": {
+              "200": {
+                "description": "successful operation",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                      "$ref": "#/definitions/Customers"
+                  }
+                }
+              },
+              "400": {
+                  "description": "ID fornecido inválido [Invalid ID supplied]"
+              },
+              "404": {
+                  "description": "Cliente não encontrado [Customers not found]"
+              },
+              "405": {
+                  "description": "Exceção de validação [Validation exception]"
+              }
+          },
+          "security": [
+              {
+                  "petstore_auth": [
+                      "write:customers",
+                      "read:customers"
+                  ]
+              }
+          ]
+      },
+      "get": {
+        "tags": [
+            "customers"
+        ],
+        "summary": "Localiza clientes por cpf [Find customers by cpf]",
+        "description": "",
+        "operationId": "findCustomersByCpf",
+        "produces": [
+            "application/json",
+            "application/xml"
+        ],
+        "parameters": [
+          {
+              "in": "body",
+              "name": "body",
+              "description": "",
+              "required": true,
+              "schema": {
+                  "$ref": "#/definitions/CustomersByCpf"
+              }
+          }
+        ],
+        "responses": {
+            "200": {
+                "description": "successful operation",
+                "schema": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CustomersByCpf"
+                    }
+                }
+            },
+            "400": {
+                "description": "Invalid status value"
+            }
+        },
+        "security": [
+            {
+                "petstore_auth": [
+                    "write:customers",
+                    "read:customers"
+                ]
+            }
+        ]
+      }
+    }      
+  },
+  "securityDefinitions": {
+      "api_key": {
+          "type": "apiKey",
+          "name": "api_key",
+          "in": "header"
+      },
+      "petstore_auth": {
+          "type": "oauth2",
+          "authorizationUrl": "https://petstore.swagger.io/oauth/authorize",
+          "flow": "implicit",
+          "scopes": {
+              "read:pets": "read your pets",
+              "write:pets": "modify pets in your account"
+          }
+      }
+  },
+  "definitions": {
+    "CustomersByCpf": {
+      "type": "object",
+      "properties": {
+        "token":{
+          "type": "string",
+          "description": "Token transacional obrigatório"
+        },
+        "client_id":{
+          "type": "string",
+          "description": "ID do Cliente na Atlantic Bank"
+        },
+        "num_cpf_cnpj":{
+          "type": "integer",
+          "format": "int64",
+          "description": "Apenas número"
+        }
+      },
+      "xml": {
+          "name": "CustomersByCpf"
+      }
+    },   
+    "Customers": {
+      "type": "object",
+      "properties": {
+          "token":{
+            "type": "string",
+            "description": "Token transacional obrigatório"
+          },
+          "client_id":{
+            "type": "string",
+            "description": "ID do Cliente na Atlantic Bank"
+          },
+          "id_tipo_cliente":{
+            "type": "integer",
+            "format": "int64",
+            "description": "Tipos (1-Ninja;2-Especial,...)"
+          },
+          "nome":{
+            "type": "string"
+          },
+          "data_nascimento":{
+            "type": "string",
+            "format": "date-time",
+            "description": "Formato YYYY-MM-DD"
+          },
+          "id_tipo_documento":{
+            "type": "integer",
+            "format": "int64",
+            "description": "Tipo de documento (1-CPF;2-Identidade;3-CNH)"
+          },
+          "doc_identificacao":{
+            "type": "string",
+            "description": "Número do documento (CPF;Identidade;CNH)"
+          },
+          "num_cpf_cnpj":{
+            "type": "integer",
+            "format": "int64",
+            "description": "Apenas número"
+          },
+          "ind_pais":{
+            "type": "integer",
+            "format": "int64",
+            "example": "1",
+            "description": "País (Código Pais: 1-Brasil;2-Estados Unidos;3-Inglaterra)"
+          },
+          "num_ddd_telefone":{
+            "type": "integer",
+            "format": "int64"
+          },
+          "num_telefone":{
+            "type": "integer",
+            "format": "int64",
+            "description": "Apenas número"
+          },
+          "email":{
+            "type": "string",
+            "example": "cliente@cliente.com"
+          },
+          "senha_acesso":{
+            "type": "string"
+          },
+          "faixa_salarial":{
+            "type": "string",
+            "example": "123.25"
+          },
+          "nome_fantasia":{
+            "type": "string"
+          },
+          "cep":{
+            "type": "integer",
+            "format": "int64"
+          },
+          "endereco":{
+            "type": "string"
+          },
+          "numero":{
+            "type": "integer",
+            "format": "int64"
+          },
+          "complemento":{
+            "type": "string"
+          },
+          "bairro":{
+            "type": "string"
+          },
+          "cidade":{
+            "type": "string"
+          },
+          "uf":{
+            "type": "string",
+            "example": "RJ"
+          },
+          "renda_bruta_mensal":{
+            "type": "string",
+            "example": "123.50"
+          },
+          "pep":{
+            "type": "string"
+          },
+          "id_profissao":{
+            "type": "integer",
+            "format": "int64",
+            "example": "1"
+          },
+          "valor_patrimonio":{
+            "type": "string",
+            "example": "123.85"
+          },
+          "leu_termo_uso":{
+            "type": "string",
+            "example": "S"
+          },
+          "aceitou_termo_uso":{
+            "type": "string",
+            "example": "S"
+          },
+          "leu_politica_privacidade":{
+            "type": "string",
+            "example": "S"
+          },
+          "aceitou_politica_privacidade":{
+            "type": "string",
+            "example": "S"
+          }
+      },
+      "xml": {
+          "name": "Customers"
+      }
+    }  
+  },
+  "externalDocs": {
+      "description": "Find out more about Swagger",
+      "url": "http://swagger.io"
+  }
+}
